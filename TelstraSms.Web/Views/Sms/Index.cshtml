@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "SMS";
+}
+
+<h2>Telstra SMS</h2>
+
+<div class="row">
+    <div class="col-lg-1">
+        <p>Phone Number:</p>
+        <input id="phone-number-input" type="text" name="phone-number" value="" style="width:500px;display:block;"/>
+        <br />
+        <p>Message:</p>
+        <textarea id="message-input" raws="10" cols="50" style="height:100px;width:500px;display:block;"></textarea>
+        <br />        
+        <input type="button" name="send-button" value="Send" style="width:500px;display:block;" onclick="sendSms()" />
+    </div>
+</div>
+
+<script src="~/scripts/App/sms.js"></script>
