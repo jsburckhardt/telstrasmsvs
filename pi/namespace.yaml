@@ -7,3 +7,14 @@ spec:
   - kubernetes
 status:
   phase: Active
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: drones2
+spec:
+  finalizers:
+  - kubernetes
+status:
+  phase: Active
