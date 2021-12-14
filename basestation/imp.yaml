@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: imp-config
-  namespace: basestation-api
+  namespace: redback
 data:
   DEVICE_ID: "1"
   ATAK_TCP_1: 192.168.4.20:4242
@@ -38,7 +38,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: imp-service
-  namespace: basestation-api
+  namespace: redback
   labels:
     helm.sh/chart: imp-0.1.0
     app.kubernetes.io/name: imp-service
