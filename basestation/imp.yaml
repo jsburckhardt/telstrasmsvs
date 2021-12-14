@@ -57,7 +57,7 @@ spec:
         app.kubernetes.io/instance: imp
     spec:
       imagePullSecrets:
-        - name: ecr-secret
+        - name: ase-ecr-credentials
       securityContext:
         {}
       containers:
