@@ -51,7 +51,7 @@ spec:
       - name: ecr-secret
       containers:
       - name: imp
-        image: "ecr.dbe-2q2szb3.microsoftdatabox.com:31001/imp:1.6.0-beta-arm32v7"
+        image: "ecr.dbe-2q2szb3.microsoftdatabox.com:31001/imp:1.6.1-arm32v7"
         imagePullPolicy: Always
         resources:
           limits:
