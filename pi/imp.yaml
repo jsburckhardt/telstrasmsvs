@@ -62,9 +62,6 @@ spec:
             memory: 2Mi
         ports:
         - containerPort: 3000
-        args:
-        - droneservice
-        - --verbose
         envFrom:
         - configMapRef:
             name: imp-config
