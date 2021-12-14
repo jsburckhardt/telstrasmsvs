@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: imp-config
+data:
+  DEVICE_ID: "Pi1"
+  ODS_URL: "http://ods/detect"
+  OCS1_URL: "http://192.168.3.3/something"
+  OCS2_URL: "http://192.168.3.3/something"
+  ODS_THRESH: ".1"
+  MAVLINK_SERIAL_ADDRESS: "/dev/serial0:921600"
+  MAVLINK_USE_SERIAL: "true"
+  MOAS_SERVICE_SLEEP: "2000"
+  MQTT_USER: "test"
+  MQTT_PASSWD: "test"
+  MQTT_ADDRESS: "192.168.4.135:1883"
+  AQMP_URL: "amqp://test:test@192.168.4.135:5672/"
+  CAMERA_PATH: "/dev/video0"
+  CAMERA_FORMAT: "YUYV 4:2:2"
+  CAMERA_WIDTH: "1280"
+  CAMERA_HEIGHT: "720"
+  APP_MODE: "PROD"
+  CAMERA_TICKER: "1"
+
+---
+# Source: imp/templates/server/imp-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: imp-service
+  labels:
+    helm.sh/chart: imp-0.1.0
+    app.kubernetes.io/name: imp-service
+    app.kubernetes.io/instance: imp
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: imp-service
+      app.kubernetes.io/instance: imp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: imp-service
+        app.kubernetes.io/instance: imp
+    spec:
+      imagePullSecrets:
+      - name: ecr-secret
+      containers:
+      - name: imp
+        image: "ecr.dbe-2q2szb3.microsoftdatabox.com:31001/imp:1.6.0-arm32v7"
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 1m
+            memory: 2Mi
+        ports:
+        - containerPort: 3000
+        args:
+        - droneservice
+        - --verbose
+        envFrom:
+        - configMapRef:
+            name: imp-config
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /data
+          name: volume
+      volumes:
+      - name: config-volume
+        configMap:
+          name: imp-config
+      - name: volume
+        hostPath:
+          path: /data
