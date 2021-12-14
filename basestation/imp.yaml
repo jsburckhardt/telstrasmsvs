@@ -5,8 +5,8 @@ metadata:
   namespace: redback
 data:
   DEVICE_ID: "1"
-  ATAK_TCP_1: 192.168.3.20:4242
-  ATAK_TCP_2: 192.168.3.42:4242
+  ATAK_TCP_1: 192.168.3.17:4242
+  ATAK_TCP_2: 192.168.3.17:4242
   ODS_URL: "http://host.docker.internal:8086/detect"
   OCS1_URL: "http://ocs:80/classify"
   OCS2_URL: "http://ocs2:80/classify"
