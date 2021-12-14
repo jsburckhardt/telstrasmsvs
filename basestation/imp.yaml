@@ -2,15 +2,18 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: imp-config
+  namespace: basestation-api
 data:
-  DEVICE_ID: "Pi1"
-  ODS_URL: "http://ods/detect"
-  OCS1_URL: "http://192.168.3.3/something"
-  OCS2_URL: "http://192.168.3.3/something"
+  DEVICE_ID: "1"
+  ATAK_TCP_1: 192.168.4.20:4242
+  ATAK_TCP_2: 192.168.4.42:4242
+  ODS_URL: "http://host.docker.internal:8086/detect"
+  OCS1_URL: "http://ocs:80/classify"
+  OCS2_URL: "http://ocs2:80/classify"
   ODS_THRESH: ".1"
   MAVLINK_SERIAL_ADDRESS: "/dev/serial0:921600"
   MAVLINK_USE_SERIAL: "true"
-  MOAS_SERVICE_SLEEP: "2000"
+  MOAS_SERVICE_SLEEP: "20"
   MQTT_USER: "test"
   MQTT_PASSWD: "test"
   MQTT_ADDRESS: "192.168.4.135:1883"
@@ -20,14 +23,22 @@ data:
   CAMERA_WIDTH: "1280"
   CAMERA_HEIGHT: "720"
   APP_MODE: "PROD"
-  CAMERA_TICKER: "1"
+  MINIO_URL: "192.168.1.137:9000"
+  MINIO_IMAGE_BUCKET: "drone-images"
+  MINIO_ACCOUNT: "devstoreaccount1"
+  MINIO_PASSWORD: "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
+  IMAGE_STORAGE_URL: "192.168.1.136:10000"
+  IMAGE_STORAGE_ACCOUNT: "devstoreaccount1"
+  IMAGE_STORAGE_ACCOUNT_KEY: "Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
 
 ---
+
 # Source: imp/templates/server/imp-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: imp-service
+  namespace: basestation-api
   labels:
     helm.sh/chart: imp-0.1.0
     app.kubernetes.io/name: imp-service
@@ -46,35 +57,29 @@ spec:
         app.kubernetes.io/instance: imp
     spec:
       imagePullSecrets:
-      - name: ecr-secret
+        - name: ecr-secret
+      securityContext:
+        {}
       containers:
-      - name: imp
-        image: "ecr.dbe-2q2szb3.microsoftdatabox.com:31001/imp:1.6.0-arm32v7"
-        imagePullPolicy: Always
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 1m
-            memory: 2Mi
-        ports:
-        - containerPort: 3000
-        args:
-        - droneservice
-        - --verbose
-        envFrom:
-        - configMapRef:
-            name: imp-config
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - mountPath: /data
-          name: volume
+        - name: imp
+          image: "ecr.dvm-tma-00132.microsoftdatabox.com:31001/imp:1.6.0-amd64"
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 2
+              memory: 256Mi
+            requests:
+              cpu: 1m
+              memory: 2Mi
+          ports:
+          - containerPort: 3000
+          args:
+          - basestationservice
+          - --verbose
+          envFrom:
+            - configMapRef:
+                name: imp-config
       volumes:
       - name: config-volume
         configMap:
           name: imp-config
-      - name: volume
-        hostPath:
-          path: /data
