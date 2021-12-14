@@ -5,8 +5,8 @@ metadata:
   namespace: redback
 data:
   DEVICE_ID: "1"
-  ATAK_TCP_1: 192.168.4.20:4242
-  ATAK_TCP_2: 192.168.4.42:4242
+  ATAK_TCP_1: 192.168.3.20:4242
+  ATAK_TCP_2: 192.168.3.42:4242
   ODS_URL: "http://host.docker.internal:8086/detect"
   OCS1_URL: "http://ocs:80/classify"
   OCS2_URL: "http://ocs2:80/classify"
@@ -16,8 +16,8 @@ data:
   MOAS_SERVICE_SLEEP: "20"
   MQTT_USER: "test"
   MQTT_PASSWD: "test"
-  MQTT_ADDRESS: "192.168.4.135:1883"
-  AQMP_URL: "amqp://test:test@192.168.4.135:5672/"
+  MQTT_ADDRESS: "192.168.3.102:1883"
+  AQMP_URL: "amqp://test:test@192.168.3.102:5672/"
   CAMERA_PATH: "/dev/video0"
   CAMERA_FORMAT: "YUYV 4:2:2"
   CAMERA_WIDTH: "1280"
