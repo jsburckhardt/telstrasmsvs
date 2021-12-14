@@ -62,7 +62,7 @@ spec:
         {}
       containers:
         - name: imp
-          image: "ecr.dbe-2q2szb3.microsoftdatabox.com:31001/imp:1.6.0-amd64"
+          image: "ecr.dbe-2q2szb3.microsoftdatabox.com:31001/imp:1.6.1-amd64"
           imagePullPolicy: Always
           resources:
             limits:
